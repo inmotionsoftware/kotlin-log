@@ -46,7 +46,7 @@ class Logger internal constructor(private var label: String, var handler: LogHan
             : this(label, factory(label))
 
     /* The log level configured for this `Logger`. */
-    var Logger.logLevel: LoggerLevel
+    var logLevel: LoggerLevel
         get() = this.handler.logLevel
         set(newValue) {
             this.handler.logLevel = newValue
