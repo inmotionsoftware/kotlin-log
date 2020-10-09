@@ -57,14 +57,3 @@ enum class LoggerLevel {
      */
     Critical
 }
-
-internal val LoggerLevel.naturalIntegralValue: Int
-    get() = when (this) {
-            LoggerLevel.Trace    -> 0
-            LoggerLevel.Debug    -> 1
-            LoggerLevel.Info     -> 2
-            LoggerLevel.Notice   -> 3
-            LoggerLevel.Warning  -> 4
-            LoggerLevel.Error    -> 5
-            LoggerLevel.Critical -> 6
-        }

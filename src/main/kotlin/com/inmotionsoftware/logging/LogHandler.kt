@@ -76,7 +76,9 @@ class MultiplexLogHandler(private val handlers: List<LogHandler>) : LogHandler {
         get() {
             val effectiveMetadata = LoggerMetadata(this.handlers.firstOrNull()?.metadata?.size ?: 0)
             return this.handlers.fold(effectiveMetadata) { acc, logHandler ->
-                acc.putAll(logHandler.metadata)
+                logHandler.metadata.entries.forEach {
+                    acc.merge(it.key, it.value) { first, _ -> first }
+                }
                 acc
             }
         }
@@ -120,7 +122,7 @@ class MultiplexLogHandler(private val handlers: List<LogHandler>) : LogHandler {
     }
 
     override operator fun set(metadataKey: String, value: LoggerMetadataValue) {
-        this.handlers.forEach { it.metadata[metadataKey] = value }
+        this.handlers.forEach { it[metadataKey] = value }
     }
 
 }
@@ -179,7 +181,9 @@ class StreamLogHandler
                 if (metadata.isNullOrEmpty())
                     this.prettyMetadata
                 else {
-                    this.metadata.putAll(metadata)
+                    metadata.entries.forEach {
+                        this.metadata.merge(it.key, it.value) { first, _ -> first }
+                    }
                     this.prettify(this.metadata)
                 }
 

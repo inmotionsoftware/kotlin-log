@@ -26,7 +26,14 @@ fun LoggerMetadata(initialCapacity: Int = 10): LoggerMetadata {
  * A logging metadata value. `LoggerMetadataValue` is string, array, and dictionary.
  */
 sealed class LoggerMetadataValue {
-    data class String(val value: String): LoggerMetadataValue()
+    data class String(val value: kotlin.String): LoggerMetadataValue()
     data class Dictionary(val value: LoggerMetadata): LoggerMetadataValue()
     data class Array(val value: List<LoggerMetadataValue>): LoggerMetadataValue()
+}
+
+/**
+ * String extension to return the string as LoggerMetadataValue
+ */
+fun String.asLoggerMetadataValue(): LoggerMetadataValue {
+    return LoggerMetadataValue.String(this)
 }
