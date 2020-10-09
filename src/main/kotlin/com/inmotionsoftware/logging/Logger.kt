@@ -96,7 +96,7 @@ class Logger internal constructor(private var label: String, var handler: LogHan
         function: String?,
         line: Int?
     ) {
-        if (level <= this.logLevel) {
+        if (this.logLevel <= level) {
             this.handler.log(
                 level = level,
                 message = message(),
@@ -122,9 +122,24 @@ fun Logger.trace(
     metadata: () -> LoggerMetadata? = { null },
     location: LogLocation? = null
 ) {
+    this.trace({message.asLoggerMessage()}, metadata, location)
+}
+
+/**
+ *  Log a message passing with the `LoggerLevel.Trace` log level.
+ *
+ *  If `LoggerLevel.Trace` is at least as severe as the `Logger`'s `logLevel`, it will be logged,
+ *  otherwise nothing will happen.
+ */
+inline
+fun Logger.trace(
+    message: () -> LoggerMessage,
+    metadata: () -> LoggerMetadata? = { null },
+    location: LogLocation? = null
+) {
     this.log(
         LoggerLevel.Trace,
-        {message.asLoggerMessage()},
+        message,
         metadata,
         {location?.source},
         location?.file,
@@ -146,9 +161,25 @@ fun Logger.debug(
     location: LogLocation? = null
 )
 {
+    this.debug({message.asLoggerMessage()}, metadata, location)
+}
+
+/**
+ *  Log a message passing with the `LoggerLevel.Debug` log level.
+ *
+ *  If `LoggerLevel.Debug` is at least as severe as the `Logger`'s `logLevel`, it will be logged,
+ *  otherwise nothing will happen.
+ */
+inline
+fun Logger.debug(
+    message: () -> LoggerMessage,
+    metadata: () -> LoggerMetadata? = { null },
+    location: LogLocation? = null
+)
+{
     this.log(
         LoggerLevel.Debug,
-        {message.asLoggerMessage()},
+        message,
         metadata,
         {location?.source},
         location?.file,
@@ -169,9 +200,24 @@ fun Logger.info(
     metadata: () -> LoggerMetadata? = { null },
     location: LogLocation? = null
 ) {
+    this.info({message.asLoggerMessage()}, metadata, location)
+}
+
+/**
+ *  Log a message passing with the `LoggerLevel.Info` log level.
+ *
+ *  If `LoggerLevel.Info` is at least as severe as the `Logger`'s `logLevel`, it will be logged,
+ *  otherwise nothing will happen.
+ */
+inline
+fun Logger.info(
+    message: () -> LoggerMessage,
+    metadata: () -> LoggerMetadata? = { null },
+    location: LogLocation? = null
+) {
     this.log(
         LoggerLevel.Info,
-        {message.asLoggerMessage()},
+        message,
         metadata,
         {location?.source},
         location?.file,
@@ -192,9 +238,24 @@ fun Logger.notice(
     metadata: () -> LoggerMetadata? = { null },
     location: LogLocation? = null
 ) {
+    this.notice({message.asLoggerMessage()}, metadata, location)
+}
+
+/**
+ *  Log a message passing with the `LoggerLevel.Notice` log level.
+ *
+ *  If `LoggerLevel.Notice` is at least as severe as the `Logger`'s `logLevel`, it will be logged,
+ *  otherwise nothing will happen.
+ */
+inline
+fun Logger.notice(
+    message: () -> LoggerMessage,
+    metadata: () -> LoggerMetadata? = { null },
+    location: LogLocation? = null
+) {
     this.log(
         LoggerLevel.Notice,
-        {message.asLoggerMessage()},
+        message,
         metadata,
         {location?.source},
         location?.file,
@@ -203,7 +264,7 @@ fun Logger.notice(
     )
 }
 
-/*
+/**
  *  Log a message passing with the `LoggerLevel.Warning` log level.
  * 
  *  If `LoggerLevel.Warning` is at least as severe as the `Logger`'s `logLevel`, it will be logged,
@@ -215,9 +276,24 @@ fun Logger.warning(
     metadata: () -> LoggerMetadata? = { null },
     location: LogLocation? = null
 ) {
+    this.warning({message.asLoggerMessage()}, metadata, location)
+}
+
+/**
+ *  Log a message passing with the `LoggerLevel.Warning` log level.
+ *
+ *  If `LoggerLevel.Warning` is at least as severe as the `Logger`'s `logLevel`, it will be logged,
+ *  otherwise nothing will happen.
+ */
+inline
+fun Logger.warning(
+    message: () -> LoggerMessage,
+    metadata: () -> LoggerMetadata? = { null },
+    location: LogLocation? = null
+) {
     this.log(
         LoggerLevel.Warning,
-        {message.asLoggerMessage()},
+        message,
         metadata,
         {location?.source},
         location?.file,
@@ -226,7 +302,7 @@ fun Logger.warning(
     )
 }
 
-/*
+/**
  *  Log a message passing with the `LoggerLevel.Error` log level.
  * 
  *  If `LoggerLevel.Error` is at least as severe as the `Logger`'s `logLevel`, it will be logged,
@@ -234,13 +310,28 @@ fun Logger.warning(
  */
 inline
 fun Logger.error(
-        message: String,
-        metadata: () -> LoggerMetadata? = { null },
-        location: LogLocation? = null
+    message: String,
+    metadata: () -> LoggerMetadata? = { null },
+    location: LogLocation? = null
+) {
+    this.error({message.asLoggerMessage()}, metadata, location)
+}
+
+/**
+ *  Log a message passing with the `LoggerLevel.Error` log level.
+ *
+ *  If `LoggerLevel.Error` is at least as severe as the `Logger`'s `logLevel`, it will be logged,
+ *  otherwise nothing will happen.
+ */
+inline
+fun Logger.error(
+    message: () -> LoggerMessage,
+    metadata: () -> LoggerMetadata? = { null },
+    location: LogLocation? = null
 ) {
     this.log(
         LoggerLevel.Error,
-        {message.asLoggerMessage()},
+        message,
         metadata,
         {location?.source},
         location?.file,
@@ -249,7 +340,7 @@ fun Logger.error(
     )
 }
 
-/*
+/**
  *  Log a message passing with the `LoggerLevel.Error` log level.
  *
  *  If `LoggerLevel.Error` is at least as severe as the `Logger`'s `logLevel`, it will be logged,
@@ -257,22 +348,14 @@ fun Logger.error(
  */
 inline
 fun Logger.error(
-        error: Throwable,
-        metadata: () -> LoggerMetadata? = { null },
-        location: LogLocation? = null
+    error: Throwable,
+    metadata: () -> LoggerMetadata? = { null },
+    location: LogLocation? = null
 ) {
-    this.log(
-            LoggerLevel.Error,
-            {error.asLoggerMessage()},
-            metadata,
-            {location?.source},
-            location?.file,
-            location?.function,
-            location?.line
-    )
+    this.error({error.asLoggerMessage()}, metadata, location)
 }
 
-/*
+/**
  *  Log a message passing with the `LoggerLevel.Critical` log level.
  * 
  *  `LoggerLevel.Critical` messages will always be logged.
@@ -283,9 +366,23 @@ fun Logger.critical(
     metadata: () -> LoggerMetadata? = { null },
     location: LogLocation? = null
 ) {
+    this.critical({message.asLoggerMessage()}, metadata, location)
+}
+
+/**
+ *  Log a message passing with the `LoggerLevel.Critical` log level.
+ *
+ *  `LoggerLevel.Critical` messages will always be logged.
+ */
+inline
+fun Logger.critical(
+    message: () -> LoggerMessage,
+    metadata: () -> LoggerMetadata? = { null },
+    location: LogLocation? = null
+) {
     this.log(
         LoggerLevel.Critical,
-        {message.asLoggerMessage()},
+        message,
         metadata,
         {location?.source},
         location?.file,
@@ -294,24 +391,16 @@ fun Logger.critical(
     )
 }
 
-/*
+/**
  *  Log a message passing with the `LoggerLevel.Critical` log level.
  *
  *  `LoggerLevel.Critical` messages will always be logged.
  */
 inline
 fun Logger.critical(
-        error: Throwable,
-        metadata: () -> LoggerMetadata? = { null },
-        location: LogLocation? = null
+    error: Throwable,
+    metadata: () -> LoggerMetadata? = { null },
+    location: LogLocation? = null
 ) {
-    this.log(
-            LoggerLevel.Critical,
-            {error.asLoggerMessage()},
-            metadata,
-            {location?.source},
-            location?.file,
-            location?.function,
-            location?.line
-    )
+    this.critical({error.asLoggerMessage()}, metadata, location)
 }

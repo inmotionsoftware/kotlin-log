@@ -31,6 +31,13 @@ class LoggingSystem  {
                 this.initialized = true
             }
         }
+
+        // For our testing we want to allow multiple bootstrapping
+        internal fun bootstrapInternal(factory: (label: String) -> LogHandler) {
+            this.lock.withWriterLock {
+                this.factory = factory
+            }
+        }
     }
 }
 
