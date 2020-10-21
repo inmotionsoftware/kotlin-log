@@ -67,7 +67,12 @@ LoggingSystem.bootstrap { StreamLogHandler.standardError(it) }
 
 #### Selecting a logging backend implementation (applications only)
 
-As the API has just launched, not many implementations exist yet. If you are interested in implementing one see the "Implementation considerations" section below explaining how to do so.
+As the API has just launched, not many implementations exist yet. If you are interested in implementing one see the "Implementation considerations" section below explaining how to do so. List of existing SwiftLog API compatible libraries:
+
+| Repository | Handler Description|
+| ----------- | ----------- |
+| [inmotionsoftware/kotlin-log-android](https://github.com/inmotionsoftware/kotlin-log-android)  |A logging backend for `KotlinLog` that sends log messages to `Logcat` |
+| [inmotionsoftware/kotlin-log-analytics-firebase](https://github.com/inmotionsoftware/kotlin-log-analytics-firebase)  |A logging backend for `KotlinLog` that sends analytics log messages to `Firebase`|
 
 ## What is an API package?
 Please see `SwiftLog`'s [What is an API package](https://github.com/apple/swift-log/blob/main/README.md#what-is-an-api-package) section.
